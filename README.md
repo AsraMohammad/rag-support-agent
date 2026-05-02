@@ -11,26 +11,30 @@ Built to demonstrate "last-mile" engineering for AI: not just a working demo, bu
 Run locally with `streamlit run app.py` after the setup steps below.
 
 ## Architecture
+
+~~~
 User question
-│
-▼
+    │
+    ▼
 [1] Embed (sentence-transformers / all-MiniLM-L6-v2, 384 dim)
-│
-▼
+    │
+    ▼
 [2] Retrieve top-3 chunks from ChromaDB (cosine similarity)
-│
-▼
+    │
+    ▼
 [3] Generate answer (Claude Sonnet 4.5)
-│   System prompt: "Use only the provided context. If not answerable, say so."
-│
-▼
+    │   System prompt: "Use only the provided context. If not answerable, say so."
+    │
+    ▼
 [4] Verify (Claude Haiku 4.5)
-│   For every factual claim, is it supported by the chunks?
-│   Returns structured JSON with per-claim reasoning.
-│
-▼
+    │   For every factual claim, is it supported by the chunks?
+    │   Returns structured JSON with per-claim reasoning.
+    │
+    ▼
 [5a] PASS → return answer + citations
 [5b] FAIL → suppress answer, return safe-fallback message
+~~~
+
 Two-pass design (answerer + verifier) trades latency for trust. The verifier uses a smaller, cheaper model because the task is judgment, not generation.
 
 ## Stack
@@ -97,6 +101,8 @@ Run with `python run_evals.py`. Full per-test results saved to `evals/eval_resul
 **No semantic cache.** A repeat question incurs full retrieval + generation cost. Adding Redis with embedding-keyed caching would cut cost by ~30-50% on real traffic.
 
 ## Project structure
+
+~~~
 rag-support-agent/
 ├── docs/                    # source documentation (markdown)
 ├── evals/
@@ -111,6 +117,7 @@ rag-support-agent/
 ├── run_evals.py             # eval harness
 ├── app.py                   # Streamlit UI
 └── README.md
+~~~
 
 ## Built in public
 
