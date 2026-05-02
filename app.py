@@ -2,7 +2,17 @@
 Streamlit web UI for the RAG documentation assistant.
 Run with: streamlit run app.py
 """
+import os
+from pathlib import Path
 import streamlit as st
+
+# Build the index on first run if missing (Streamlit Cloud cold start)
+if not Path("./chroma_db").exists():
+    with st.spinner("First-time setup: building vector index... (~60 seconds, one-time only)"):
+        import subprocess
+        subprocess.run(["python", "chunk_documents.py"], check=True)
+        subprocess.run(["python", "build_index.py"], check=True)
+
 from rag import answer_question
 
 st.set_page_config(page_title="Documentation RAG Assistant", layout="wide")
