@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from anthropic import Anthropic
 import chromadb
 from sentence_transformers import SentenceTransformer
+from verifier import verify
 
 load_dotenv()
 client = Anthropic()
@@ -65,14 +66,12 @@ def build_context(chunks):
 
 
 def answer_question(question: str):
-    """The main RAG function: retrieve + generate."""
-    # 1. Retrieve relevant chunks
+    """RAG with grounding verification."""
+    # 1. Retrieve
     chunks = retrieve(question)
     
-    # 2. Build the context
+    # 2. Generate
     context = build_context(chunks)
-    
-    # 3. Build the user message
     user_message = f"""Context from documentation:
 
 {context}
@@ -83,20 +82,32 @@ Question: {question}
 
 Answer based ONLY on the context above."""
     
-    # 4. Send to Claude
     response = client.messages.create(
         model=MODEL,
         max_tokens=1024,
         system=SYSTEM_PROMPT,
         messages=[{"role": "user", "content": user_message}],
     )
-    
     answer = response.content[0].text
     
-    # 5. Return everything
+    # 3. Verify
+    verification = verify(answer=answer, sources=chunks)
+    
+    # 4. If verification fails, replace the answer with a safety fallback
+    if verification["verdict"] == "FAIL":
+        final_answer = (
+            "I attempted to answer based on the documentation, but my self-check "
+            "could not fully verify the response against the sources. To avoid giving "
+            "you potentially incorrect information, I'm declining to answer this one."
+        )
+    else:
+        final_answer = answer
+    
     return {
         "question": question,
-        "answer": answer,
+        "answer": final_answer,
+        "raw_answer": answer,
+        "verification": verification,
         "sources": chunks,
         "tokens": {
             "input": response.usage.input_tokens,
@@ -106,7 +117,7 @@ Answer based ONLY on the context above."""
 
 
 # Main loop
-print("Documentation RAG Assistant — type 'quit' to exit")
+print("Documentation RAG Assistant (with grounding verifier) — type 'quit' to exit")
 print("=" * 60 + "\n")
 
 while True:
@@ -119,8 +130,18 @@ while True:
     result = answer_question(question)
     
     print(f"\nA: {result['answer']}\n")
-    print(f"--- Sources used ---")
+    
+    print(f"--- Verification: {result['verification']['verdict']} ---")
+    print(f"Summary: {result['verification'].get('summary', 'n/a')}")
+    if result['verification']['verdict'] == 'FAIL':
+        print(f"\nOriginal (unverified) answer was:")
+        print(f"  {result['raw_answer']}")
+    
+    print(f"\n--- Sources used ---")
     for i, c in enumerate(result["sources"], 1):
         print(f"  {i}. {c['source']} (similarity: {c['similarity']:.3f})")
-    print(f"\n--- Tokens: {result['tokens']['input']} in, {result['tokens']['output']} out ---\n")
+    
+    g_tokens = result['verification'].get('tokens', {})
+    print(f"\n--- Tokens — answerer: {result['tokens']['input']} in, {result['tokens']['output']} out"
+        f" | verifier: {g_tokens.get('input', 0)} in, {g_tokens.get('output', 0)} out ---\n")
     print("=" * 60 + "\n")
