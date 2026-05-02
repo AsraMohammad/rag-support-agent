@@ -1,0 +1,62 @@
+[
+  {
+    "id": "T01",
+    "question": "How is API usage billed?",
+    "expected_behavior": "answers using api_pricing.md",
+    "expected_verdict": "PASS"
+  },
+  {
+    "id": "T02",
+    "question": "What models does Claude offer?",
+    "expected_behavior": "lists Opus, Sonnet, Haiku",
+    "expected_verdict": "PASS"
+  },
+  {
+    "id": "T03",
+    "question": "What is the context window size?",
+    "expected_behavior": "answers ~200,000 tokens",
+    "expected_verdict": "PASS"
+  },
+  {
+    "id": "T04",
+    "question": "How do I reduce API costs?",
+    "expected_behavior": "mentions prompt caching or batch API",
+    "expected_verdict": "PASS"
+  },
+  {
+    "id": "T05",
+    "question": "Why use streaming responses?",
+    "expected_behavior": "explains improved perceived latency",
+    "expected_verdict": "PASS"
+  },
+  {
+    "id": "T06",
+    "question": "Why validate structured output?",
+    "expected_behavior": "explains LLMs can produce malformed JSON",
+    "expected_verdict": "PASS"
+  },
+  {
+    "id": "T07",
+    "question": "What is Constitutional AI?",
+    "expected_behavior": "answers using intro_to_claude.md",
+    "expected_verdict": "PASS"
+  },
+  {
+    "id": "T08",
+    "question": "What is the population of Tokyo?",
+    "expected_behavior": "refuses politely",
+    "expected_verdict": "PASS"
+  },
+  {
+    "id": "T09",
+    "question": "Who is the CEO of Anthropic?",
+    "expected_behavior": "refuses politely",
+    "expected_verdict": "PASS"
+  },
+  {
+    "id": "T10",
+    "question": "How do I bake sourdough bread?",
+    "expected_behavior": "refuses politely",
+    "expected_verdict": "PASS"
+  }
+]

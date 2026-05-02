@@ -117,31 +117,32 @@ Answer based ONLY on the context above."""
 
 
 # Main loop
-print("Documentation RAG Assistant (with grounding verifier) — type 'quit' to exit")
-print("=" * 60 + "\n")
-
-while True:
-    question = input("Q: ").strip()
-    if question.lower() == "quit":
-        break
-    if not question:
-        continue
-    
-    result = answer_question(question)
-    
-    print(f"\nA: {result['answer']}\n")
-    
-    print(f"--- Verification: {result['verification']['verdict']} ---")
-    print(f"Summary: {result['verification'].get('summary', 'n/a')}")
-    if result['verification']['verdict'] == 'FAIL':
-        print(f"\nOriginal (unverified) answer was:")
-        print(f"  {result['raw_answer']}")
-    
-    print(f"\n--- Sources used ---")
-    for i, c in enumerate(result["sources"], 1):
-        print(f"  {i}. {c['source']} (similarity: {c['similarity']:.3f})")
-    
-    g_tokens = result['verification'].get('tokens', {})
-    print(f"\n--- Tokens — answerer: {result['tokens']['input']} in, {result['tokens']['output']} out"
-        f" | verifier: {g_tokens.get('input', 0)} in, {g_tokens.get('output', 0)} out ---\n")
+if __name__ == "__main__":
+    print("Documentation RAG Assistant (with grounding verifier) — type 'quit' to exit")
     print("=" * 60 + "\n")
+
+    while True:
+        question = input("Q: ").strip()
+        if question.lower() == "quit":
+            break
+        if not question:
+            continue
+        
+        result = answer_question(question)
+        
+        print(f"\nA: {result['answer']}\n")
+        
+        print(f"--- Verification: {result['verification']['verdict']} ---")
+        print(f"Summary: {result['verification'].get('summary', 'n/a')}")
+        if result['verification']['verdict'] == 'FAIL':
+            print(f"\nOriginal (unverified) answer was:")
+            print(f"  {result['raw_answer']}")
+        
+        print(f"\n--- Sources used ---")
+        for i, c in enumerate(result["sources"], 1):
+            print(f"  {i}. {c['source']} (similarity: {c['similarity']:.3f})")
+        
+        g_tokens = result['verification'].get('tokens', {})
+        print(f"\n--- Tokens — answerer: {result['tokens']['input']} in, {result['tokens']['output']} out"
+            f" | verifier: {g_tokens.get('input', 0)} in, {g_tokens.get('output', 0)} out ---\n")
+        print("=" * 60 + "\n")

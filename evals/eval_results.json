@@ -1,0 +1,378 @@
+{
+  "summary": {
+    "total_tests": 10,
+    "verdict_accuracy_percent": 100.0,
+    "correct_verdicts": 10,
+    "avg_latency_seconds": 5.6,
+    "total_runtime_seconds": 55.96,
+    "total_tokens": {
+      "answerer_input": 4315,
+      "answerer_output": 909,
+      "verifier_input": 6326,
+      "verifier_output": 3527
+    },
+    "estimated_cost_usd": 0.0505
+  },
+  "results": [
+    {
+      "id": "T01",
+      "question": "How is API usage billed?",
+      "expected_behavior": "answers using api_pricing.md",
+      "expected_verdict": "PASS",
+      "actual_verdict": "PASS",
+      "match": true,
+      "answer": "Based on the provided documentation:\n\nAPI usage is billed based on the **number of tokens processed** (Source 2: api_pricing.md). A token is roughly 3-4 characters of text, so 1,000 tokens equals about 750 words.\n\nThe billing structure includes:\n\n1. **Different rates for input vs. output tokens** (Source 3: api_pricing.md) - Input tokens (your prompt) and output tokens (the response) are billed at different rates, with output tokens typically being more expensive because generation is more compute-intensive than reading.\n\n2. **Model-based pricing** (Source 2: api_pricing.md) - Pricing varies by model: Claude Opus is the most expensive (optimized for complex reasoning), Claude Sonnet offers a balance of capability and cost, and Claude Haiku is the cheapest option (ideal for high-volume tasks).\n\n3. **Cost-saving options** (Source 1 and 3: api_pricing.md):\n   - Batch API requests can save 50% on cost for non-urgent workloads\n   - Prompt caching can reduce costs by up to 90% for repeated context",
+      "raw_answer": "Based on the provided documentation:\n\nAPI usage is billed based on the **number of tokens processed** (Source 2: api_pricing.md). A token is roughly 3-4 characters of text, so 1,000 tokens equals about 750 words.\n\nThe billing structure includes:\n\n1. **Different rates for input vs. output tokens** (Source 3: api_pricing.md) - Input tokens (your prompt) and output tokens (the response) are billed at different rates, with output tokens typically being more expensive because generation is more compute-intensive than reading.\n\n2. **Model-based pricing** (Source 2: api_pricing.md) - Pricing varies by model: Claude Opus is the most expensive (optimized for complex reasoning), Claude Sonnet offers a balance of capability and cost, and Claude Haiku is the cheapest option (ideal for high-volume tasks).\n\n3. **Cost-saving options** (Source 1 and 3: api_pricing.md):\n   - Batch API requests can save 50% on cost for non-urgent workloads\n   - Prompt caching can reduce costs by up to 90% for repeated context",
+      "verification_summary": "All factual claims in the answer are directly supported by the provided sources. The answer accurately conveys information about token-based billing, different rates for input/output tokens, model-based pricing tiers, and cost-saving options including batch API and prompt caching.",
+      "sources": [
+        {
+          "source": "api_pricing.md",
+          "similarity": -0.0446164608001709
+        },
+        {
+          "source": "api_pricing.md",
+          "similarity": -0.10962975025177002
+        },
+        {
+          "source": "api_pricing.md",
+          "similarity": -0.16877543926239014
+        }
+      ],
+      "elapsed_seconds": 9.51,
+      "tokens": {
+        "answerer": {
+          "input": 433,
+          "output": 265
+        },
+        "verifier": {
+          "input": 808,
+          "output": 837
+        }
+      }
+    },
+    {
+      "id": "T02",
+      "question": "What models does Claude offer?",
+      "expected_behavior": "lists Opus, Sonnet, Haiku",
+      "expected_verdict": "PASS",
+      "actual_verdict": "PASS",
+      "match": true,
+      "answer": "I don't have information about that in the provided documentation.\n\nThe context describes Claude as \"a family of large language models\" but does not specify what individual models are offered or their names.",
+      "raw_answer": "I don't have information about that in the provided documentation.\n\nThe context describes Claude as \"a family of large language models\" but does not specify what individual models are offered or their names.",
+      "verification_summary": "The answer makes two factual claims: one about Claude being described as a family of LLMs (directly supported by the sources) and one about the absence of specific model names in the documentation (accurately observed). Both claims are supported.",
+      "sources": [
+        {
+          "source": "intro_to_claude.md",
+          "similarity": 0.27425873279571533
+        },
+        {
+          "source": "intro_to_claude.md",
+          "similarity": 0.10839390754699707
+        },
+        {
+          "source": "intro_to_claude.md",
+          "similarity": 0.0358959436416626
+        }
+      ],
+      "elapsed_seconds": 4.62,
+      "tokens": {
+        "answerer": {
+          "input": 354,
+          "output": 42
+        },
+        "verifier": {
+          "input": 507,
+          "output": 217
+        }
+      }
+    },
+    {
+      "id": "T03",
+      "question": "What is the context window size?",
+      "expected_behavior": "answers ~200,000 tokens",
+      "expected_verdict": "PASS",
+      "actual_verdict": "PASS",
+      "match": true,
+      "answer": "Based on the provided documentation, the context window size is **up to 200,000 tokens**, which allows Claude to process roughly 150,000 words of text in a single request.\n\n**Source: [Source 1: intro_to_claude.md]**",
+      "raw_answer": "Based on the provided documentation, the context window size is **up to 200,000 tokens**, which allows Claude to process roughly 150,000 words of text in a single request.\n\n**Source: [Source 1: intro_to_claude.md]**",
+      "verification_summary": "Both factual claims in the answer are directly supported by the source material (intro_to_claude.md). The answer accurately represents the information provided.",
+      "sources": [
+        {
+          "source": "intro_to_claude.md",
+          "similarity": -0.45390498638153076
+        },
+        {
+          "source": "best_practices.md",
+          "similarity": -0.6742385625839233
+        },
+        {
+          "source": "api_pricing.md",
+          "similarity": -0.7034081220626831
+        }
+      ],
+      "elapsed_seconds": 4.4,
+      "tokens": {
+        "answerer": {
+          "input": 443,
+          "output": 61
+        },
+        "verifier": {
+          "input": 614,
+          "output": 213
+        }
+      }
+    },
+    {
+      "id": "T04",
+      "question": "How do I reduce API costs?",
+      "expected_behavior": "mentions prompt caching or batch API",
+      "expected_verdict": "PASS",
+      "actual_verdict": "PASS",
+      "match": true,
+      "answer": "Based on the provided documentation, here are ways to reduce API costs:\n\n**From Source 1 (api_pricing.md):**\n- **Use the Batch API**: Batch API requests can save 50% on cost. This is suitable for non-urgent workloads where getting results within 24 hours is acceptable.\n\n**From Source 2 (api_pricing.md):**\n- **Choose a less expensive model**: Consider using Claude Haiku, which is the cheapest option and ideal for high-volume tasks like classification, extraction, and simple Q&A. Claude Sonnet offers a balance of capability and cost, while Claude Opus is the most expensive.\n\n**From Source 3 (best_practices.md):**\n- **Monitor token usage**: The documentation mentions monitoring token usage as a best practice, which can help you track and optimize costs (since pricing is based on the number of tokens processed).\n\nThese are the cost-reduction strategies mentioned in the provided documentation.",
+      "raw_answer": "Based on the provided documentation, here are ways to reduce API costs:\n\n**From Source 1 (api_pricing.md):**\n- **Use the Batch API**: Batch API requests can save 50% on cost. This is suitable for non-urgent workloads where getting results within 24 hours is acceptable.\n\n**From Source 2 (api_pricing.md):**\n- **Choose a less expensive model**: Consider using Claude Haiku, which is the cheapest option and ideal for high-volume tasks like classification, extraction, and simple Q&A. Claude Sonnet offers a balance of capability and cost, while Claude Opus is the most expensive.\n\n**From Source 3 (best_practices.md):**\n- **Monitor token usage**: The documentation mentions monitoring token usage as a best practice, which can help you track and optimize costs (since pricing is based on the number of tokens processed).\n\nThese are the cost-reduction strategies mentioned in the provided documentation.",
+      "verification_summary": "All factual claims in the answer are supported by the provided source documents. The answer accurately cites specific cost-reduction strategies and model options mentioned in the sources.",
+      "sources": [
+        {
+          "source": "api_pricing.md",
+          "similarity": 0.00045311450958251953
+        },
+        {
+          "source": "api_pricing.md",
+          "similarity": -0.017992615699768066
+        },
+        {
+          "source": "best_practices.md",
+          "similarity": -0.18478333950042725
+        }
+      ],
+      "elapsed_seconds": 8.35,
+      "tokens": {
+        "answerer": {
+          "input": 446,
+          "output": 217
+        },
+        "verifier": {
+          "input": 773,
+          "output": 614
+        }
+      }
+    },
+    {
+      "id": "T05",
+      "question": "Why use streaming responses?",
+      "expected_behavior": "explains improved perceived latency",
+      "expected_verdict": "PASS",
+      "actual_verdict": "PASS",
+      "match": true,
+      "answer": "According to Source 1 (best_practices.md), streaming responses should be used for chat applications because they allow users to see output as it's generated rather than waiting for the full response. This dramatically improves perceived latency.",
+      "raw_answer": "According to Source 1 (best_practices.md), streaming responses should be used for chat applications because they allow users to see output as it's generated rather than waiting for the full response. This dramatically improves perceived latency.",
+      "verification_summary": "All factual claims in the answer are directly supported by the cited source (best_practices.md). The answer accurately quotes and paraphrases the source material without adding unsupported claims.",
+      "sources": [
+        {
+          "source": "best_practices.md",
+          "similarity": 0.1876702904701233
+        },
+        {
+          "source": "best_practices.md",
+          "similarity": -0.315244197845459
+        },
+        {
+          "source": "intro_to_claude.md",
+          "similarity": -0.335563063621521
+        }
+      ],
+      "elapsed_seconds": 4.29,
+      "tokens": {
+        "answerer": {
+          "input": 467,
+          "output": 51
+        },
+        "verifier": {
+          "input": 630,
+          "output": 255
+        }
+      }
+    },
+    {
+      "id": "T06",
+      "question": "Why validate structured output?",
+      "expected_behavior": "explains LLMs can produce malformed JSON",
+      "expected_verdict": "PASS",
+      "actual_verdict": "PASS",
+      "match": true,
+      "answer": "Based on the provided documentation:\n\n**Why validate structured output:** You should validate structured output (like JSON) because LLMs occasionally produce malformed structures, and validation catches this before downstream code breaks.\n\n**Source:** [Source 1: best_practices.md]\n\nThe documentation specifically recommends using a schema validator (such as Pydantic in Python) to validate Claude's responses when asking for JSON or other structured output.",
+      "raw_answer": "Based on the provided documentation:\n\n**Why validate structured output:** You should validate structured output (like JSON) because LLMs occasionally produce malformed structures, and validation catches this before downstream code breaks.\n\n**Source:** [Source 1: best_practices.md]\n\nThe documentation specifically recommends using a schema validator (such as Pydantic in Python) to validate Claude's responses when asking for JSON or other structured output.",
+      "verification_summary": "All factual claims in the answer are directly supported by the sources provided. The answer accurately paraphrases and cites the best_practices.md guidance on validating structured output.",
+      "sources": [
+        {
+          "source": "best_practices.md",
+          "similarity": -0.16800463199615479
+        },
+        {
+          "source": "best_practices.md",
+          "similarity": -0.3879995346069336
+        },
+        {
+          "source": "api_pricing.md",
+          "similarity": -0.6470376253128052
+        }
+      ],
+      "elapsed_seconds": 5.86,
+      "tokens": {
+        "answerer": {
+          "input": 441,
+          "output": 93
+        },
+        "verifier": {
+          "input": 646,
+          "output": 329
+        }
+      }
+    },
+    {
+      "id": "T07",
+      "question": "What is Constitutional AI?",
+      "expected_behavior": "answers using intro_to_claude.md",
+      "expected_verdict": "PASS",
+      "actual_verdict": "PASS",
+      "match": true,
+      "answer": "Based on the provided documentation:\n\nConstitutional AI is a technique developed by Anthropic researchers to make AI systems safer and more aligned with human values. Claude models are trained using this Constitutional AI technique.\n\n**Source: Source 1 (intro_to_claude.md)**",
+      "raw_answer": "Based on the provided documentation:\n\nConstitutional AI is a technique developed by Anthropic researchers to make AI systems safer and more aligned with human values. Claude models are trained using this Constitutional AI technique.\n\n**Source: Source 1 (intro_to_claude.md)**",
+      "verification_summary": "All factual claims in the answer are directly supported by the source material. The answer accurately paraphrases information from intro_to_claude.md regarding Constitutional AI and Claude's training methodology.",
+      "sources": [
+        {
+          "source": "intro_to_claude.md",
+          "similarity": -0.10919594764709473
+        },
+        {
+          "source": "intro_to_claude.md",
+          "similarity": -0.4114847183227539
+        },
+        {
+          "source": "intro_to_claude.md",
+          "similarity": -0.44140076637268066
+        }
+      ],
+      "elapsed_seconds": 4.34,
+      "tokens": {
+        "answerer": {
+          "input": 387,
+          "output": 60
+        },
+        "verifier": {
+          "input": 559,
+          "output": 248
+        }
+      }
+    },
+    {
+      "id": "T08",
+      "question": "What is the population of Tokyo?",
+      "expected_behavior": "refuses politely",
+      "expected_verdict": "PASS",
+      "actual_verdict": "PASS",
+      "match": true,
+      "answer": "I don't have information about that in the provided documentation.\n\nThe documentation provided focuses on Anthropic's Claude API, including pricing, token usage, best practices, and technical capabilities. It does not contain any information about Tokyo's population.",
+      "raw_answer": "I don't have information about that in the provided documentation.\n\nThe documentation provided focuses on Anthropic's Claude API, including pricing, token usage, best practices, and technical capabilities. It does not contain any information about Tokyo's population.",
+      "verification_summary": "All factual claims in the answer are supported by the sources. The answer correctly identifies the scope of the documentation and appropriately declines to answer a question outside that scope.",
+      "sources": [
+        {
+          "source": "api_pricing.md",
+          "similarity": -0.8693217039108276
+        },
+        {
+          "source": "best_practices.md",
+          "similarity": -0.8981616497039795
+        },
+        {
+          "source": "intro_to_claude.md",
+          "similarity": -0.9883898496627808
+        }
+      ],
+      "elapsed_seconds": 5.73,
+      "tokens": {
+        "answerer": {
+          "input": 487,
+          "output": 52
+        },
+        "verifier": {
+          "input": 649,
+          "output": 401
+        }
+      }
+    },
+    {
+      "id": "T09",
+      "question": "Who is the CEO of Anthropic?",
+      "expected_behavior": "refuses politely",
+      "expected_verdict": "PASS",
+      "actual_verdict": "PASS",
+      "match": true,
+      "answer": "I don't have information about that in the provided documentation.",
+      "raw_answer": "I don't have information about that in the provided documentation.",
+      "verification_summary": "The answer contains only a generic disclaimer, which is always considered valid per the grounding verification guidelines. No factual claims are made that require source support.",
+      "sources": [
+        {
+          "source": "api_pricing.md",
+          "similarity": -0.615250825881958
+        },
+        {
+          "source": "intro_to_claude.md",
+          "similarity": -0.6725907325744629
+        },
+        {
+          "source": "intro_to_claude.md",
+          "similarity": -0.7108428478240967
+        }
+      ],
+      "elapsed_seconds": 3.5,
+      "tokens": {
+        "answerer": {
+          "input": 432,
+          "output": 15
+        },
+        "verifier": {
+          "input": 555,
+          "output": 149
+        }
+      }
+    },
+    {
+      "id": "T10",
+      "question": "How do I bake sourdough bread?",
+      "expected_behavior": "refuses politely",
+      "expected_verdict": "PASS",
+      "actual_verdict": "PASS",
+      "match": true,
+      "answer": "I don't have information about that in the provided documentation.\n\nThe documentation provided covers Claude API best practices, including topics like prompting techniques, error handling, and structured output validation. It does not contain information about baking sourdough bread.",
+      "raw_answer": "I don't have information about that in the provided documentation.\n\nThe documentation provided covers Claude API best practices, including topics like prompting techniques, error handling, and structured output validation. It does not contain information about baking sourdough bread.",
+      "verification_summary": "All factual claims in the answer are supported by the source documents. The answer accurately describes what is in the documentation and correctly notes the absence of information about sourdough bread.",
+      "sources": [
+        {
+          "source": "best_practices.md",
+          "similarity": -0.8834706544876099
+        },
+        {
+          "source": "best_practices.md",
+          "similarity": -0.9856728315353394
+        },
+        {
+          "source": "best_practices.md",
+          "similarity": -0.9980270862579346
+        }
+      ],
+      "elapsed_seconds": 5.35,
+      "tokens": {
+        "answerer": {
+          "input": 425,
+          "output": 53
+        },
+        "verifier": {
+          "input": 585,
+          "output": 264
+        }
+      }
+    }
+  ]
+}
