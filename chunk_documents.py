@@ -2,50 +2,53 @@
 Phase 2: Load all markdown files from docs/ and split them into chunks.
 Save the chunks to a JSON file we can inspect.
 """
-import os
+"""
+Phase 2: Load all markdown files from docs/ and split them into chunks.
+"""
 import json
 from pathlib import Path
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-# Where our documents live
-DOCS_DIR = Path("docs")
-# Where we'll save the chunked output
-OUTPUT_FILE = "chunks.json"
+# Use absolute path resolution so it works regardless of cwd
+HERE = Path(__file__).parent.resolve()
+DOCS_DIR = HERE / "docs"
+OUTPUT_FILE = HERE / "chunks.json"
 
-# The splitter — this is the workhorse
-splitter = RecursiveCharacterTextSplitter(
-    chunk_size=500,        # target ~500 characters per chunk
-    chunk_overlap=50,      # 50-character overlap between chunks
-    separators=["\n\n", "\n", ". ", " ", ""],  # try to split on these, in order
-)
 
-all_chunks = []
-
-# Loop through every .md file in docs/
-for md_file in DOCS_DIR.glob("*.md"):
-    print(f"Loading {md_file.name}...")
+def chunk_all_documents():
+    """Read every .md file in docs/, split into chunks, save to chunks.json."""
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=500,
+        chunk_overlap=50,
+        separators=["\n\n", "\n", ". ", " ", ""],
+    )
     
-    # Read the file
-    with open(md_file, "r", encoding="utf-8") as f:
-        text = f.read()
+    all_chunks = []
+    md_files = list(DOCS_DIR.glob("*.md"))
     
-    # Split into chunks
-    chunks = splitter.split_text(text)
-    print(f"  Split into {len(chunks)} chunks")
+    if not md_files:
+        raise RuntimeError(f"No .md files found in {DOCS_DIR}")
     
-    # Save each chunk with metadata
-    for i, chunk in enumerate(chunks):
-        all_chunks.append({
-            "source": md_file.name,
-            "chunk_index": i,
-            "text": chunk,
-        })
+    for md_file in md_files:
+        print(f"Loading {md_file.name}...")
+        with open(md_file, "r", encoding="utf-8") as f:
+            text = f.read()
+        chunks = splitter.split_text(text)
+        print(f"  Split into {len(chunks)} chunks")
+        for i, chunk in enumerate(chunks):
+            all_chunks.append({
+                "source": md_file.name,
+                "chunk_index": i,
+                "text": chunk,
+            })
+    
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        json.dump(all_chunks, f, indent=2, ensure_ascii=False)
+    
+    print(f"Total chunks: {len(all_chunks)}")
+    return len(all_chunks)
 
-# Write all chunks to a JSON file we can inspect
-with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-    json.dump(all_chunks, f, indent=2, ensure_ascii=False)
 
-print(f"\nTotal chunks: {len(all_chunks)}")
-print(f"Saved to: {OUTPUT_FILE}")
-print(f"\nFirst chunk preview:")
-print(all_chunks[0]["text"][:200])
+if __name__ == "__main__":
+    n = chunk_all_documents()
+    print(f"Saved to: {OUTPUT_FILE}")

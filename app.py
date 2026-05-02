@@ -6,12 +6,13 @@ import os
 from pathlib import Path
 import streamlit as st
 
-# Build the index on first run if missing (Streamlit Cloud cold start)
-if not Path("./chroma_db").exists():
-    with st.spinner("First-time setup: building vector index... (~60 seconds, one-time only)"):
-        import subprocess
-        subprocess.run(["python", "chunk_documents.py"], check=True)
-        subprocess.run(["python", "build_index.py"], check=True)
+# Build index on cold start if missing (Streamlit Cloud)
+if not Path(__file__).parent.joinpath("chroma_db").exists():
+    with st.spinner("First-time setup: building vector index... (~60s, one time)"):
+        from chunk_documents import chunk_all_documents
+        from build_index import build_index
+        chunk_all_documents()
+        build_index()
 
 from rag import answer_question
 
