@@ -3,7 +3,5 @@ python-dotenv
 streamlit
 chromadb
 sentence-transformers
-langchain
-langchain-community
 langchain-text-splitters
-pypdf
+protobuf<5
