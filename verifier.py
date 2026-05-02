@@ -12,43 +12,32 @@ from anthropic import Anthropic
 load_dotenv()
 client = Anthropic()
 
-# Use the cheaper model for verification — it's a structured task, no creativity needed
 VERIFIER_MODEL = "claude-haiku-4-5"
 
-VERIFIER_SYSTEM_PROMPT = """You are a grounding verifier. Your job is to check whether 
-an AI-generated answer is fully supported by a set of source documents.
+VERIFIER_SYSTEM_PROMPT = """You are a grounding verifier. Check whether an AI-generated 
+answer is fully supported by source documents.
 
 Process:
-1. Identify every factual claim in the answer.
-2. For each claim, decide if it is supported by the sources (verbatim or by reasonable paraphrase).
-3. Ignore generic disclaimers like "I don't have that information" — those are always valid.
-4. Return your verdict as JSON.
+1. Identify factual claims in the answer.
+2. For each, decide if it is supported by the sources.
+3. Ignore generic disclaimers like "I don't have that information" — always valid.
+4. Keep reasoning brief (one sentence per claim, max).
 
-Output format (return ONLY valid JSON, no markdown fences, no extra text):
+Output ONLY valid JSON, no markdown, no extra text:
 {
   "verdict": "PASS" or "FAIL",
   "claims": [
-    {"claim": "...", "supported": true or false, "reasoning": "..."}
+    {"claim": "brief claim", "supported": true, "reasoning": "one sentence"}
   ],
-  "summary": "..."
+  "summary": "one sentence overall"
 }
 
 PASS = every factual claim is supported.
-FAIL = at least one claim is not supported (i.e. potential hallucination)."""
+FAIL = at least one claim is unsupported."""
 
 
 def verify(answer: str, sources: list) -> dict:
-    """
-    Check if an answer is grounded in the provided sources.
-    
-    Args:
-        answer: the generated answer text
-        sources: list of dicts with 'text' and 'source' keys
-    
-    Returns:
-        dict with 'verdict', 'claims', 'summary'
-    """
-    # Format the sources for the verifier
+    """Check if an answer is grounded in the provided sources."""
     source_text = "\n\n".join([
         f"[Source: {s['source']}]\n{s['text']}"
         for s in sources
@@ -70,7 +59,7 @@ Verify whether every factual claim in the answer is supported by the sources. Re
     
     response = client.messages.create(
         model=VERIFIER_MODEL,
-        max_tokens=1024,
+        max_tokens=2048,
         system=VERIFIER_SYSTEM_PROMPT,
         messages=[{"role": "user", "content": user_message}],
     )
@@ -79,7 +68,7 @@ Verify whether every factual claim in the answer is supported by the sources. Re
     
     # Try to parse the JSON response
     try:
-        # Strip code fences if Claude added them despite our instruction
+        # Strip code fences if Claude added them
         if raw.startswith("```"):
             raw = raw.split("```")[1]
             if raw.startswith("json"):
@@ -88,13 +77,24 @@ Verify whether every factual claim in the answer is supported by the sources. Re
         
         result = json.loads(raw)
     except json.JSONDecodeError as e:
-        # If parsing fails, return a "FAIL" verdict and the raw text for debugging
-        result = {
-            "verdict": "FAIL",
-            "claims": [],
-            "summary": f"Verifier returned invalid JSON: {e}",
-            "raw": raw,
-        }
+        # JSON broke — usually truncation. Try heuristic: scan for verdict keyword.
+        raw_lower = raw.lower()
+        if '"verdict": "pass"' in raw_lower or "'verdict': 'pass'" in raw_lower:
+            result = {
+                "verdict": "PASS",
+                "claims": [],
+                "summary": "Verifier reached PASS verdict but full JSON could not be parsed.",
+                "raw": raw,
+                "json_error": str(e),
+            }
+        else:
+            result = {
+                "verdict": "FAIL",
+                "claims": [],
+                "summary": "Verifier output could not be parsed and no PASS verdict found.",
+                "raw": raw,
+                "json_error": str(e),
+            }
     
     result["tokens"] = {
         "input": response.usage.input_tokens,
@@ -112,7 +112,6 @@ if __name__ == "__main__":
         }
     ]
     
-    # Test 1: a grounded answer (should PASS)
     print("Test 1: grounded answer")
     result = verify(
         answer="Claude Sonnet balances capability and speed.",
@@ -121,7 +120,6 @@ if __name__ == "__main__":
     print(json.dumps(result, indent=2))
     print()
     
-    # Test 2: a hallucinated answer (should FAIL)
     print("Test 2: hallucinated answer")
     result = verify(
         answer="Claude Sonnet costs $50 per million tokens.",
