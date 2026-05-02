@@ -1,0 +1,57 @@
+[
+  {
+    "source": "api_pricing.md",
+    "chunk_index": 0,
+    "text": "# Anthropic API Pricing\n\nAnthropic charges for API usage based on the number of tokens processed. A token is roughly 3-4 characters of text, so 1,000 tokens equals about 750 words.\n\nPricing varies by model. Claude Opus is the most expensive, optimized for complex reasoning. Claude Sonnet offers a balance of capability and cost. Claude Haiku is the cheapest option, ideal for high-volume tasks like classification, extraction, and simple Q&A."
+  },
+  {
+    "source": "api_pricing.md",
+    "chunk_index": 1,
+    "text": "Input tokens (the prompt you send) are billed at a different rate than output tokens (the response). Output tokens are typically more expensive because generation is more compute-intensive than reading.\n\nAnthropic offers prompt caching, which can reduce costs by up to 90% for repeated context. When you cache a prompt, subsequent calls that reuse the same prefix are billed at a lower rate."
+  },
+  {
+    "source": "api_pricing.md",
+    "chunk_index": 2,
+    "text": "Batch API requests can save 50% on cost. The batch API is suitable for non-urgent workloads where results within 24 hours is acceptable.\n\nFree tier credits are available for new accounts. Usage limits scale based on your spending tier — accounts in higher tiers have higher rate limits and access to additional features."
+  },
+  {
+    "source": "best_practices.md",
+    "chunk_index": 0,
+    "text": "# Claude API Best Practices\n\n## Use system prompts effectively\n\nThe system prompt sets the persona, context, and rules for Claude. Place instructions, role definitions, and formatting requirements in the system prompt rather than the user message. This separation makes prompts more maintainable.\n\n## Provide examples"
+  },
+  {
+    "source": "best_practices.md",
+    "chunk_index": 1,
+    "text": "## Provide examples\n\nFew-shot prompting — showing Claude examples of desired input/output pairs — significantly improves consistency. Two or three high-quality examples are usually more effective than long instructions.\n\n## Handle errors gracefully\n\nAPI calls can fail for many reasons: network issues, rate limits, invalid requests, or service outages. Production code should wrap API calls in try/except blocks and implement exponential backoff for retries.\n\n## Monitor token usage"
+  },
+  {
+    "source": "best_practices.md",
+    "chunk_index": 2,
+    "text": "## Monitor token usage\n\nEvery response includes a usage object with input_tokens and output_tokens. Log these values to track cost and identify expensive prompts. Setting max_tokens prevents runaway responses.\n\n## Use the right model\n\nDon't default to the most powerful model. Many tasks — classification, simple extraction, formatting — work fine on Haiku at a fraction of the cost. Reserve Opus and Sonnet for tasks that genuinely need their reasoning power.\n\n## Streaming for user-facing apps"
+  },
+  {
+    "source": "best_practices.md",
+    "chunk_index": 3,
+    "text": "## Streaming for user-facing apps\n\nFor chat applications, use streaming responses so users see output as it's generated rather than waiting for the full response. This dramatically improves perceived latency.\n\n## Validate structured output\n\nWhen asking Claude for JSON or other structured output, validate the response with a schema (e.g. Pydantic in Python). LLMs occasionally produce malformed structures; validation catches this before downstream code breaks."
+  },
+  {
+    "source": "intro_to_claude.md",
+    "chunk_index": 0,
+    "text": "# Introduction to Claude\n\nClaude is a family of large language models developed by Anthropic. Claude models are trained using Constitutional AI, a technique developed by Anthropic researchers to make AI systems safer and more aligned with human values."
+  },
+  {
+    "source": "intro_to_claude.md",
+    "chunk_index": 1,
+    "text": "The Claude family currently includes Opus, Sonnet, and Haiku models, each optimized for different use cases. Opus is the most capable, designed for complex reasoning tasks. Sonnet balances capability and speed. Haiku is the fastest and most cost-effective, ideal for high-volume applications."
+  },
+  {
+    "source": "intro_to_claude.md",
+    "chunk_index": 2,
+    "text": "Claude models support a context window of up to 200,000 tokens, allowing them to process roughly 150,000 words of text in a single request. This makes Claude well-suited for analyzing long documents, codebases, and conversations.\n\nClaude can be accessed through the Anthropic API, the claude.ai web interface, and various third-party platforms. The API supports streaming responses, function calling, vision input, and structured output formats like JSON."
+  },
+  {
+    "source": "intro_to_claude.md",
+    "chunk_index": 3,
+    "text": "Claude is designed to be helpful, harmless, and honest. It will decline requests that could cause harm, and it acknowledges uncertainty rather than fabricating information."
+  }
+]
