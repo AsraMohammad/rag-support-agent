@@ -6,10 +6,11 @@ Built to demonstrate "last-mile" engineering for AI: not just a working demo, bu
 
 ## Demo
 
+**🔗 Live demo: https://asra-doc-rag-assistant.streamlit.app**
+
 ![Streamlit UI screenshot](docs/screenshot.png)
 
-Run locally with `streamlit run app.py` after the setup steps below.
-
+First load takes ~60 seconds (one-time index build on cold start). Run locally with `streamlit run app.py` for instant queries.
 ## Architecture
 
 ~~~
@@ -49,6 +50,8 @@ Two-pass design (answerer + verifier) trades latency for trust. The verifier use
 
 ## Setup
 
+
+> Or just visit the [live demo](https://asra-doc-rag-assistant.streamlit.app) — no install needed.
 ```bash
 git clone https://github.com/AsraMohammad/rag-support-agent.git
 cd rag-support-agent
@@ -122,6 +125,8 @@ rag-support-agent/
 ## Built in public
 
 This project was built across a single ~8-hour focused session as a deliberate pivot into AI engineering. Commits document the journey phase by phase.
+
+**Dependency conflicts at deploy time.** First production deploy failed with `TypeError: Descriptors cannot be created directly` from a protobuf version mismatch — `langchain==1.2.x` pulls in `langgraph` which requires protobuf ≥5, but `chromadb` requires ≤4. Fixed by removing the unused `langchain` meta-package (only `langchain-text-splitters` is actually needed) and pinning `protobuf<5`. Caught at deploy, not in local dev — a lesson in how local-only `pip freeze` can hide transitive conflicts that only surface in clean environments.
 
 ## License
 
